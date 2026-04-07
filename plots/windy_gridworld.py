@@ -68,3 +68,73 @@ def plot_policy(
         ax.plot(xs, ys, color="tab:red", linewidth=2, marker="o", markersize=4)
 
     return fig, ax
+
+
+def plot_td_errors(
+    errors: list[float],
+    window: int = 20,
+    title: str = "Mean |TD error| per episode",
+):
+    """Plot per-episode mean absolute TD error with a rolling-mean overlay."""
+    fig, ax = plt.subplots(figsize=(8, 4), constrained_layout=True)
+    arr = np.array(errors)
+    ax.plot(arr, alpha=0.3, color="tab:orange", label="per episode")
+    if len(arr) >= window:
+        rolling = np.convolve(arr, np.ones(window) / window, mode="valid")
+        ax.plot(range(window - 1, len(arr)), rolling, color="tab:orange", label=f"{window}-ep mean")
+        ax.legend()
+    ax.set_xlabel("Episode")
+    ax.set_ylabel("Mean |δ|")
+    ax.set_title(title)
+    return fig, ax
+
+
+def plot_value_heatmap(
+    env: WindyGridworldEnv,
+    value_fn,
+    title: str = "Learned state values V(s)",
+):
+    """Heatmap of V(s) = value_fn(s) for all grid states.
+
+    value_fn can be:
+      - LinearTD0:          lambda s: agent.value_of(s)
+      - LinearSarsaControl: lambda s: max(agent.action_value_of(s, a) for a in ACTIONS)
+    """
+    grid = np.zeros((env.rows, env.cols))
+    for row in range(env.rows):
+        for col in range(env.cols):
+            grid[row, col] = value_fn((row, col))
+
+    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
+    im = ax.imshow(grid, origin="upper", aspect="auto", cmap="viridis")
+    fig.colorbar(im, ax=ax, label="V(s)")
+    ax.set_title(title)
+    ax.set_xlabel("Column")
+    ax.set_ylabel("Row")
+
+    start_row, start_col = env.start
+    goal_row, goal_col = env.goal
+    ax.text(start_col, start_row, "S", ha="center", va="center", color="white", fontsize=14, fontweight="bold")
+    ax.text(goal_col, goal_row, "G", ha="center", va="center", color="white", fontsize=14, fontweight="bold")
+
+    return fig, ax
+
+
+def plot_episode_length_comparison(
+    lengths_dict: dict[str, list[int]],
+    window: int = 20,
+    title: str = "Episode length comparison",
+):
+    """Overlay episode-length curves for multiple agents with rolling-mean smoothing."""
+    fig, ax = plt.subplots(figsize=(10, 4), constrained_layout=True)
+    for label, lengths in lengths_dict.items():
+        arr = np.array(lengths, dtype=float)
+        ax.plot(arr, alpha=0.15)
+        if len(arr) >= window:
+            rolling = np.convolve(arr, np.ones(window) / window, mode="valid")
+            ax.plot(range(window - 1, len(arr)), rolling, label=label)
+    ax.set_xlabel("Episode")
+    ax.set_ylabel("Episode length")
+    ax.set_title(title)
+    ax.legend()
+    return fig, ax
