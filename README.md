@@ -1,46 +1,41 @@
-# `mia_rl`
+# MIA Reinforcement Learning
 
-## Package organization
+This repository contains the codebase for the Reinforcement Learning course. It includes implementations of various RL algorithms, from Dynamic Programming to Policy Gradients.
 
-- `mia_rl/core/`
-  - generic abstractions such as `Environment`, `Policy`, `Agent`, `Episode`, `Transition`
-- `mia_rl/envs/`
-  - interactive environments for model-free methods
-- `mia_rl/mdps/`
-  - known-model MDP abstractions for dynamic programming classes
-- `mia_rl/policies/`
-  - reusable policies
-- `mia_rl/agents/`
-  - learning algorithms grouped by task
-- `mia_rl/plots/`
-  - reusable plotting functions
-- `mia_rl/experiments/`
-  - rollout, training, evaluation, and experiment helpers
-- `mia_rl/scripts/`
-  - runnable experiment scripts
-- `mia_rl/outputs/`
-  - generated plots and experiment results
+## Package Organization
 
-## Current practical TODOs
+The core logic resides in the `mia_rl/` package:
 
-For the Windy Gridworld Sarsa practical, complete:
-- `mia_rl/envs/windy_gridworld.py`
-- `mia_rl/agents/control/sarsa.py`
+- [core/](file:///home/luiscunha/RL_MIA/mia_rl/core/) — Generic abstractions (`Environment`, `Agent`, `Policy`, etc.)
+- [envs/](file:///home/luiscunha/RL_MIA/mia_rl/envs/) — Environments (e.g., Windy Gridworld, TicTacToe, Blackjack)
+- [mdps/](file:///home/luiscunha/RL_MIA/mia_rl/mdps/) — MDP abstractions for Dynamic Programming
+- [agents/](file:///home/luiscunha/RL_MIA/mia_rl/agents/) — RL algorithms (SARSA, REINFORCE, Monte Carlo, etc.)
+- [features/](file:///home/luiscunha/RL_MIA/mia_rl/features/) — State representation and feature engineering
+- [policies/](file:///home/luiscunha/RL_MIA/mia_rl/policies/) — Reusable policy implementations
+- [experiments/](file:///home/luiscunha/RL_MIA/mia_rl/experiments/) — Training and evaluation loops
+- [notebooks/](file:///home/luiscunha/RL_MIA/mia_rl/notebooks/) — Interactive tutorials and practicals
+- [scripts/](file:///home/luiscunha/RL_MIA/mia_rl/scripts/) — Executable experiment scripts
+- [plots/](file:///home/luiscunha/RL_MIA/mia_rl/plots/) — Visualization helpers
+- [outputs/](file:///home/luiscunha/RL_MIA/mia_rl/outputs/) — Saved results and plots
 
+## Setup
 
-Optional TODO extension after the main practical is complete (n-step Sarsa):
-- `mia_rl/agents/control/n_step_sarsa.py`
+1. **Create the environment**:
+   ```bash
+   conda env create -f mia_rl/environment.yml
+   ```
+2. **Activate the environment**:
+   ```bash
+   conda activate rl
+   ```
 
-## Setting up the Environment
+## Running Experiments
 
-First, create the conda environment:
+Experiments can be run as Python modules from the project root:
 
-- `conda env create -f environment.yml`
-
-After implementing the TODOs, run:
-
-- `python -m mia_rl.scripts.run_windy_gridworld_sarsa`
-- `python -m mia_rl.scripts.run_windy_gridworld_n_step_sarsa`
-
-By default, generated figures are saved under `mia_rl/outputs/`.
-
+- **Windy Gridworld (SARSA)**:
+  ```bash
+  python -m mia_rl.scripts.run_windy_gridworld_sarsa
+  ```
+- **TicTacToe (Policy Gradient)**:
+  See [notebooks/TicTacToe_PolicyGradient.ipynb](file:///home/luiscunha/RL_MIA/mia_rl/notebooks/TicTacToe_PolicyGradient.ipynb).
