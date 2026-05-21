@@ -53,17 +53,25 @@ class NStepSarsaControl(ControlAgent[StateT, ActionT]):
             self._update_oldest_transition()
             self._pending_transitions.pop(0)
 
+    def _update_oldest_transition(self) -> None:
+        if not self._pending_transitions:
+            return
+
         oldest_transition = self._pending_transitions[0]
 
-        n_step_window = self._pending_transitions[: self.n_steps]
-        rewards_sum = sum(transition.reward * (self.gamma ** i) for i, transition in enumerate(n_step_window))
+        limit = min(self.n_steps, len(self._pending_transitions))
+        rewards_sum = 0.0
+        for i in range(limit):
+            rewards_sum += (self.gamma ** i) * self._pending_transitions[i].reward
 
-        if len(n_step_window) == self.n_steps and not n_step_window[-1].done:
-            last_transition = n_step_window[-1]
-            next_action = self._selected_actions[last_transition.next_state]
-            rewards_sum += (self.gamma ** self.n_steps) * self.Q[(last_transition.next_state, next_action)]
+        if limit == self.n_steps:
+            last_transition = self._pending_transitions[-1]
+            if not last_transition.done and last_transition.next_state is not None:
+                next_action = self._selected_actions[last_transition.next_state]
+                rewards_sum += (self.gamma ** self.n_steps) * self.Q[(last_transition.next_state, next_action)]
 
-        self.Q[(oldest_transition.state, oldest_transition.action)] += self.alpha * (rewards_sum - self.Q[(oldest_transition.state, oldest_transition.action)])
+        state_action = (oldest_transition.state, oldest_transition.action)
+        self.Q[state_action] += self.alpha * (rewards_sum - self.Q[state_action])
 
     def action_value_of(self, state: StateT, action: ActionT) -> float:
         return float(self.Q[(state, action)])

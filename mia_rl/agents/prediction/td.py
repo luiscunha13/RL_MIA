@@ -22,3 +22,34 @@ class TD0Prediction(PredictionAgent[BlackjackState, BlackjackAction]):
 
     def value_of(self, state: BlackjackState) -> float:
         return float(self.V[state])
+
+
+class NStepTDPrediction(PredictionAgent[BlackjackState, BlackjackAction]):
+    def __init__(self, n: int, alpha: float = 0.05, gamma: float = 1.0):
+        self.n = n
+        self.alpha = alpha
+        super().__init__(gamma=gamma)
+
+    def reset(self) -> None:
+        self.V = defaultdict(float)
+
+    def update_episode(self, episode: Episode[BlackjackState, BlackjackAction]) -> None:
+        transitions = episode.transitions
+        T = len(transitions)
+        for t in range(T):
+            G = 0.0
+            limit = min(t + self.n, T)
+            for i in range(t, limit):
+                G += (self.gamma ** (i - t)) * transitions[i].reward
+            
+            if t + self.n < T:
+                G += (self.gamma ** self.n) * self.V[transitions[t + self.n].state]
+            else:
+                last_trans = transitions[-1]
+                if not last_trans.done and last_trans.next_state is not None:
+                    G += (self.gamma ** (T - t)) * self.V[last_trans.next_state]
+            
+            self.V[transitions[t].state] += self.alpha * (G - self.V[transitions[t].state])
+
+    def value_of(self, state: BlackjackState) -> float:
+        return float(self.V[state])

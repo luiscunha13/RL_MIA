@@ -42,13 +42,13 @@ class SarsaControl(ControlAgent[StateT, ActionT]):
     def update_transition(self, transition: Transition[StateT, ActionT]) -> None:
         bootstrap = 0.0
 
-        if not transition.done and transition:
+        if not transition.done and transition.next_state is not None:
             next_action = self._selected_actions[transition.next_state]
             bootstrap = self.Q[(transition.next_state, next_action)]
 
         td_target = transition.reward + self.gamma * bootstrap
-        current_value = self.action_value_of
-        self.Q # acabar
+        current_value = self.action_value_of(transition.state, transition.action)
+        self.Q[(transition.state, transition.action)] += self.alpha * (td_target - current_value)
 
     def action_value_of(self, state: StateT, action: ActionT) -> float:
         return float(self.Q[(state, action)])
