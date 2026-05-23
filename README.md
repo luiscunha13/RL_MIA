@@ -6,17 +6,17 @@ This repository contains the codebase for the Reinforcement Learning course. It 
 
 The core logic resides in the `mia_rl/` package:
 
-- [core/](file:///home/luiscunha/RL_MIA/mia_rl/core/) — Generic abstractions (`Environment`, `Agent`, `Policy`, etc.)
-- [envs/](file:///home/luiscunha/RL_MIA/mia_rl/envs/) — Environments (e.g., Windy Gridworld, TicTacToe, Blackjack)
-- [mdps/](file:///home/luiscunha/RL_MIA/mia_rl/mdps/) — MDP abstractions for Dynamic Programming
-- [agents/](file:///home/luiscunha/RL_MIA/mia_rl/agents/) — RL algorithms (SARSA, REINFORCE, Monte Carlo, etc.)
-- [features/](file:///home/luiscunha/RL_MIA/mia_rl/features/) — State representation and feature engineering
-- [policies/](file:///home/luiscunha/RL_MIA/mia_rl/policies/) — Reusable policy implementations
-- [experiments/](file:///home/luiscunha/RL_MIA/mia_rl/experiments/) — Training and evaluation loops
-- [notebooks/](file:///home/luiscunha/RL_MIA/mia_rl/notebooks/) — Interactive tutorials and practicals
-- [scripts/](file:///home/luiscunha/RL_MIA/mia_rl/scripts/) — Executable experiment scripts
-- [plots/](file:///home/luiscunha/RL_MIA/mia_rl/plots/) — Visualization helpers
-- [outputs/](file:///home/luiscunha/RL_MIA/mia_rl/outputs/) — Saved results and plots
+- [core/](mia_rl/core/) — Generic abstractions (`Environment`, `Agent`, `Policy`, etc.)
+- [envs/](mia_rl/envs/) — Environments (e.g., Windy Gridworld, TicTacToe, Blackjack)
+- [mdps/](mia_rl/mdps/) — MDP abstractions for Dynamic Programming
+- [agents/](mia_rl/agents/) — RL algorithms (SARSA, REINFORCE, Monte Carlo, prediction and planning)
+- [features/](mia_rl/features/) — State representation and feature engineering
+- [policies/](mia_rl/policies/) — Reusable policy implementations
+- [experiments/](mia_rl/experiments/) — Training and evaluation loops
+- [notebooks/](mia_rl/notebooks/) — Interactive tutorials and practicals
+- [scripts/](mia_rl/scripts/) — Executable experiment scripts
+- [plots/](mia_rl/plots/) — Visualization helpers
+- [outputs/](mia_rl/outputs/) — Saved results and plots
 
 ## Setup
 
@@ -33,9 +33,27 @@ The core logic resides in the `mia_rl/` package:
 
 Experiments can be run as Python modules from the project root:
 
-- **Windy Gridworld (SARSA)**:
+- **Windy Gridworld**:
   ```bash
   python -m mia_rl.scripts.run_windy_gridworld_sarsa
   ```
-- **TicTacToe (Policy Gradient)**:
-  See [notebooks/TicTacToe_PolicyGradient.ipynb](file:///home/luiscunha/RL_MIA/mia_rl/notebooks/TicTacToe_PolicyGradient.ipynb).
+- **Other available scripts**:
+   - `python -m mia_rl.scripts.run_windy_gridworld_n_step_sarsa`
+   - `python -m mia_rl.scripts.run_windy_gridworld_mc_control`
+   - `python -m mia_rl.scripts.run_windy_gridworld_linear_sarsa`
+   - `python -m mia_rl.scripts.run_windy_gridworld_linear_td`
+   - `python -m mia_rl.scripts.run_windy_gridworld_torch_sarsa`
+   - `python -m mia_rl.scripts.run_blackjack_prediction`
+   - `python -m mia_rl.scripts.run_blackjack_nstep_comparison`
+   - `python -m mia_rl.scripts.run_kbandits`
+   - `python -m mia_rl.scripts.run_car_rental_dp`
+   - `python -m mia_rl.scripts.run_gridworld_policy_iteration`
+
+## Notebooks
+
+The repository also includes interactive notebooks in [mia_rl/notebooks/](mia_rl/notebooks/):
+
+- [KBandits_Demo.ipynb](mia_rl/notebooks/KBandits_Demo.ipynb)
+- [TicTacToe_Demo.ipynb](mia_rl/notebooks/TicTacToe_Demo.ipynb)
+- [TicTacToe_MCTS.ipynb](mia_rl/notebooks/TicTacToe_MCTS.ipynb)
+- [TicTacToe_PolicyGradient.ipynb](mia_rl/notebooks/TicTacToe_PolicyGradient.ipynb)
